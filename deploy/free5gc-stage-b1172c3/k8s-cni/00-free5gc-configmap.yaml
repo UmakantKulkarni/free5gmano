@@ -1,78 +1,5 @@
 apiVersion: v1
 data:
-  free5GC.yaml: |
-    db_uri: mongodb://mongodb-svc:27017/free5GC
-
-    #all logging levels
-    #panic
-    #fatal
-    #error
-    #warn
-    #info
-    #debug
-    #trace
-    logger:
-    # network function
-      AMF:
-        debugLevel: info
-        ReportCaller: true
-      SMF:
-        debugLevel: info
-        ReportCaller: true
-      UDR:
-        debugLevel: info
-        ReportCaller: true
-      UDM:
-        debugLevel: info
-        ReportCaller: true
-      NRF:
-        debugLevel: info
-        ReportCaller: true
-      PCF:
-        debugLevel: info
-        ReportCaller: true
-      AUSF:
-        debugLevel: info
-        ReportCaller: true
-      N3IWF:
-        debugLevel: info
-        ReportCaller: true
-    # library
-      NAS:
-        debugLevel: info
-        ReportCaller: true
-      FSM:
-        debugLevel: info
-        ReportCaller: true
-      NGAP:
-        debugLevel: info
-        ReportCaller: true
-      NamfComm:
-        debugLevel: info
-        ReportCaller: true
-      NamfEventExposure:
-        debugLevel: info
-        ReportCaller: true
-      NsmfPDUSession:
-        debugLevel: info
-        ReportCaller: true
-      NudrDataRepository:
-        debugLevel: info
-        ReportCaller: true
-      OpenApi:
-        debugLevel: info
-        ReportCaller: true
-      Aper:
-        debugLevel: info
-        ReportCaller: true
-      CommonConsumerTest:
-        debugLevel: info
-        ReportCaller: true
-    # webui
-      WEBUI:
-        debugLevel: info
-        ReportCaller: true
-
   amfcfg.yaml: |
     info:
       version: 1.0.1
@@ -128,6 +55,32 @@ data:
       t3502: 720
       t3512: 3600
       non3gppDeregistrationTimer: 3240
+    # the kind of log output
+    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+    # ReportCaller: enable the caller report or not, value: true or false
+    logger:
+      AMF:
+        debugLevel: debug
+        ReportCaller: false
+      NAS:
+        debugLevel: debug
+        ReportCaller: false
+      FSM:
+        debugLevel: debug
+        ReportCaller: false
+      NGAP:
+        debugLevel: debug
+        ReportCaller: false
+      Aper:
+        debugLevel: debug
+        ReportCaller: false
+      PathUtil:
+        debugLevel: debug
+        ReportCaller: false
+      OpenApi:
+        debugLevel: debug
+        ReportCaller: false
+
 
   smfcfg.yaml: |
     info:
@@ -197,7 +150,31 @@ data:
             ipv4: 8.8.4.4
             ipv6: 2001:4860:4860::8844
       nrfUri: http://free5gc-nrf-svc:29510
-
+    # the kind of log output
+    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+    # ReportCaller: enable the caller report or not, value: true or false
+    logger:
+      SMF:
+        debugLevel: debug
+        ReportCaller: false
+      NAS:
+        debugLevel: debug
+        ReportCaller: false
+      NGAP:
+        debugLevel: debug
+        ReportCaller: false
+      Aper:
+        debugLevel: debug
+        ReportCaller: false
+      PathUtil:
+        debugLevel: debug
+        ReportCaller: false
+      OpenApi:
+        debugLevel: debug
+        ReportCaller: false
+      PFCP:
+        debugLevel: debug
+        ReportCaller: false
 
   ausfcfg.yaml: |
     info:
@@ -219,6 +196,19 @@ data:
         - mcc: 123
           mnc: 45
       groupId: ausfGroup001
+    # the kind of log output
+    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+    # ReportCaller: enable the caller report or not, value: true or false
+    logger:
+      AUSF:
+        debugLevel: debug
+        ReportCaller: false
+      PathUtil:
+        debugLevel: debug
+        ReportCaller: false
+      OpenApi:
+        debugLevel: debug
+        ReportCaller: false
 
   nrfcfg.yaml: |
     info:
@@ -239,6 +229,23 @@ data:
       serviceNameList:
         - nnrf-nfm
         - nnrf-disc
+    # the kind of log output
+    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+    # ReportCaller: enable the caller report or not, value: true or false
+    logger:
+      NRF:
+        debugLevel: debug
+        ReportCaller: false
+      PathUtil:
+        debugLevel: debug
+        ReportCaller: false
+      OpenApi:
+        debugLevel: debug
+        ReportCaller: false
+      MongoDBLibrary:
+        debugLevel: debug
+        ReportCaller: false
+
 
   nssfcfg.yaml: |
     info:
@@ -563,6 +570,19 @@ data:
               homeSnssai:
                 sst: 1
                 sd: 3
+    # the kind of log output
+    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+    # ReportCaller: enable the caller report or not, value: true or false
+    logger:
+      NSSF:
+        debugLevel: debug
+        ReportCaller: false
+      PathUtil:
+        debugLevel: debug
+        ReportCaller: false
+      OpenApi:
+        debugLevel: debug
+        ReportCaller: false
 
   pcfcfg.yaml: |
     info:
@@ -588,10 +608,23 @@ data:
           suppFeat: 3
         - serviceName: npcf-eventexposure
         - serviceName: npcf-ue-policy-control
+    # the kind of log output
+    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+    # ReportCaller: enable the caller report or not, value: true or false
+    logger:
+      PCF:
+        debugLevel: debug
+        ReportCaller: false
+      PathUtil:
+        debugLevel: debug
+        ReportCaller: false
+      OpenApi:
+        debugLevel: debug
+        ReportCaller: false
 
   udmcfg.yaml: |
     info:
-      version: 1.0.1
+      version: 1.0.0
       description: UDM initial local configuration
 
     configuration:
@@ -632,10 +665,23 @@ data:
         udmProfileAHNPrivateKey: c53c22208b61860b06c62e5406a7b330c2b577aa5558981510d128247d38bd1d
         udmProfileBHNPublicKey: 0472DA71976234CE833A6907425867B82E074D44EF907DFB4B3E21C1C2256EBCD15A7DED52FCBB097A4ED250E036C7B9C8C7004C4EEDC4F068CD7BF8D3F900E3B4
         udmProfileBHNPrivateKey: F1AB1074477EBCC7F554EA1C5FC368B1616730155E0041AC447D6301975FECDA
+    # the kind of log output
+    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+    # ReportCaller: enable the caller report or not, value: true or false
+    logger:
+      UDM:
+        debugLevel: debug
+        ReportCaller: false
+      OpenApi:
+        debugLevel: debug
+        ReportCaller: false
+      PathUtil:
+        debugLevel: debug
+        ReportCaller: false
 
   udrcfg.yaml: |
     info:
-      version: 1.0.1
+      version: 1.0.0
       description: UDR initial local configuration
 
     configuration:
@@ -648,15 +694,31 @@ data:
         name: free5gc
         url: mongodb://mongodb-svc:27017
       nrfUri: http://free5gc-nrf-svc:29510
+    # the kind of log output
+    # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
+    # ReportCaller: enable the caller report or not, value: true or false
+    logger:
+      UDR:
+        debugLevel: debug
+        ReportCaller: false
+      MongoDBLibrary:
+        debugLevel: debug
+        ReportCaller: false
+      PathUtil:
+        debugLevel: debug
+        ReportCaller: false
+      OpenApi:
+        debugLevel: debug
+        ReportCaller: false
 
   upfcfg.yaml: |
     info:
-      version: 1.0.1
+      version: 1.0.0
       description: UPF yamliguration
 
     configuration:
       # debugLevel: panic|fatal|error|warn|info|debug|trace
-      debugLevel: info
+      debugLevel: debug
       # ReportCaller: true|false
       ReportCaller: false
 

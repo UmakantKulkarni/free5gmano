@@ -34,9 +34,6 @@ spec:
         - name: udmcfg
           mountPath: /go/src/free5gc/config/udmcfg.yaml
           subPath: udmcfg.yaml
-        - name: free5gc
-          mountPath: /go/src/free5gc/config/free5GC.yaml
-          subPath: free5GC.yaml
       volumes:
       - name: udmcfg
         configMap:
@@ -44,9 +41,3 @@ spec:
           items:
           - key: udmcfg.yaml
             path: udmcfg.yaml
-      - name: free5gc
-        configMap:
-          name: free5gc-configmap
-          items:
-          - key: free5GC.yaml
-            path: free5GC.yaml
