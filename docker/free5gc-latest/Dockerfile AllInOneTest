@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 RUN apt -y update
-RUN apt -y install mongodb wget git iputils-ping tcpdump net-tools nano make iproute2
+RUN apt -y install mongodb wget git iputils-ping tcpdump net-tools nano make iproute2 vim
 
 WORKDIR /
 RUN mkdir /data
@@ -18,9 +18,6 @@ ENV PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
 WORKDIR $GOPATH/src
 RUN git clone --recursive -j `nproc` https://github.com/free5gc/free5gc.git
-RUN cd free5gc
-RUN git reset --hard b1172c3c4b9d3e1467ec1fbc349194279bc18ada
-RUN git pull
 
 WORKDIR $GOPATH/src/free5gc
 RUN git checkout master
