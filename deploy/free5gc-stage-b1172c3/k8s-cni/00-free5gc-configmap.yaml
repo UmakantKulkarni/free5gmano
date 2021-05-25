@@ -131,7 +131,7 @@ data:
 
   smfcfg.conf: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description:  initial local configuration
 
     configuration:
@@ -169,6 +169,19 @@ data:
           UPF:
             type: UPF
             node_id: free5gc-upf-svc # 10.96.100.10
+            sNssaiUpfInfos: # S-NSSAI information list for this UPF
+              - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+                  sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                  sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                dnnUpfInfoList: # DNN information list for this S-NSSAI
+                  - dnn: internet
+                    pools:
+                      - cidr: 60.60.0.0/16
+            interfaces: # Interface list for this UPF
+              - interfaceType: N3 # the type of the interface (N3 or N9)
+                endpoints: # the IP address of this N3/N9 interface on this UPF
+                  - free5gc-upf-svc
+                networkInstance: internet # Data Network Name (DNN)
 
         links:
           - A: gNB1
@@ -665,46 +678,41 @@ data:
 
   uerouting.yaml: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description: Routing information for UE
 
-    ueRoutingInfo:
-      - SUPI: imsi-2089300007487
-        AN: free5gc-upf-svc # 10.96.100.10
-        PathList:
-          - DestinationIP: 60.60.0.100
-            UPF: !!seq
-              - BranchingUPF
-              - AnchorUPF1
+    ueRoutingInfo: # the list of UE routing information
+      UE1: # Group Name
+        members:
+        - imsi-2089300007487 # Subscription Permanent Identifier of the UE
+        topology: # Network topology for this group (Uplink: A->B, Downlink: B->A)
+        # default path derived from this topology
+        # node name should be consistent with smfcfg.yaml
+          - A: gNB1
+            B: BranchingUPF
+          - A: BranchingUPF
+            B: AnchorUPF1
+        specificPath:
+          - dest: 60.60.0.103/32 # the destination IP address on Data Network (DN)
+            # the order of UPF nodes in this path. We use the UPF's name to represent each UPF node.
+            # The UPF's name should be consistent with smfcfg.yaml
+            path: [BranchingUPF, AnchorUPF2]
 
-          - DestinationIP: 60.60.0.103
-            UPF: !!seq
-              - BranchingUPF
-              - AnchorUPF2
-
-      - SUPI: imsi-2089300007486
-        AN: 10.200.200.102
-        PathList:
-          - DestinationIP: 10.0.0.10
-            UPF: !!seq
-              - BranchingUPF
-              - AnchorUPF1
-
-          - DestinationIP: 10.0.0.11
-            UPF: !!seq
-              - BranchingUPF
-              - AnchorUPF2
-
-    routeProfile:
-      MEC1:
-        forwardingPolicyID: 10
-
-    pfdDataForApp:
-      - applicationId: edge
-        pfds:
-          - pfdID: pfd1
-            flowDescriptions:
-              - permit out ip from 60.60.0.1 8080 to any
+      UE2: # Group Name
+        members:
+        - imsi-2089300007486 # Subscription Permanent Identifier of the UE
+        topology: # Network topology for this group (Uplink: A->B, Downlink: B->A)
+        # default path derived from this topology
+        # node name should be consistent with smfcfg.yaml
+          - A: gNB1
+            B: BranchingUPF
+          - A: BranchingUPF
+            B: AnchorUPF1
+        specificPath:
+          - dest: 10.0.0.11/32 # the destination IP address on Data Network (DN)
+            # the order of UPF nodes in this path. We use the UPF's name to represent each UPF node.
+            # The UPF's name should be consistent with smfcfg.yaml
+            path: [BranchingUPF, AnchorUPF2]
 
   webuicfg.conf: |
     info:

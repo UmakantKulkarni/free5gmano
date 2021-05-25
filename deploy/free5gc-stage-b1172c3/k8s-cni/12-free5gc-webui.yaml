@@ -28,7 +28,7 @@ spec:
       containers:
       - name: free5gc-webui
         command: ["/bin/bash", "-c"]
-        args: ["go run webconsole/server.go"]
+        args: ["cd webconsole && go run server.go"]
         image: umakantk/free5gc-control-plane:b1172c3
         volumeMounts:
         - name: webuicfg

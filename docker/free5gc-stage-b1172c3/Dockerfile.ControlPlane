@@ -33,7 +33,6 @@ RUN go get github.com/free5gc/pcf/service
 RUN make pcf
 RUN go get github.com/free5gc/smf/logger
 RUN go get github.com/free5gc/smf/service
-COPY smfsvcinit $GOPATH/src/free5gc/NFs/smf/service/init.go
 RUN make smf
 RUN go get github.com/free5gc/udm/logger
 RUN go get github.com/free5gc/udm/service
