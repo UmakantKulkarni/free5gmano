@@ -6,7 +6,7 @@ RUN apt update -y
 RUN apt -y install wget git iputils-ping tcpdump net-tools nano vim
 
 WORKDIR $GOPATH/src
-RUN git clone --recursive -j `nproc` https://github.com/free5gc/free5gc.git
+RUN git clone --recursive -b v3.0.5 -j `nproc` https://github.com/free5gc/free5gc.git
 
 WORKDIR $GOPATH/src/free5gc
 RUN git checkout master
