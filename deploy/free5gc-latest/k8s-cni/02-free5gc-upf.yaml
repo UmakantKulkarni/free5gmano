@@ -5,7 +5,6 @@ metadata:
 spec:
   selector:
     app: free5gc-upf
-  clusterIP: None # 10.96.100.10
   ports:
     - name: sbi
       port: 29518
@@ -17,7 +16,7 @@ spec:
       protocol: UDP
       port: 8805
 ---
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: free5gc-upf-deployment
@@ -31,9 +30,9 @@ spec:
       labels:
         app: free5gc-upf
     spec:
-      containers:      
+      containers:
       - name: free5gc-upf-container
-        image: free5gmano/free5gc-user-plane:stage3.0.4
+        image: umakantk/free5gc-user-plane:b1172c3
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -56,12 +55,12 @@ spec:
       - name: upfcfg
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: upfcfg.yaml
             path: upfcfg.yaml
       - name: free5gc
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: free5GC.conf
             path: free5GC.conf

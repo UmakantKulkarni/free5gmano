@@ -160,7 +160,7 @@ data:
           dnnSmfInfoList:
             - dnn: internet
       pfcp:
-        addr: free5gc-smf-svc 
+        addr: free5gc-smf-svc
       userplane_information:
         up_nodes:
           gNB1:
@@ -168,8 +168,8 @@ data:
             an_ip: free5gc-test-svc # 10.96.100.50
           UPF:
             type: UPF
-            node_id: 10.244.0.92 # free5gc-upf-svc # 10.96.100.10
-          
+            node_id: free5gc-upf-svc # 10.96.100.10
+
         links:
           - A: gNB1
             B: UPF
@@ -597,7 +597,7 @@ data:
           log: free5gc/udmsslkey.log
           pem: free5gc/support/TLS/udm.pem
           key: free5gc/support/TLS/udm.key
-      
+
       udrclient:
         scheme: http
         ipv4Addr: free5gc-udr-svc
@@ -662,7 +662,7 @@ data:
           cidr: 60.60.0.0/24
           # [optional] dnn_list[*].natifname
           # natifname: eth0
-    
+
   uerouting.yaml: |
     info:
       version: 1.0.0
@@ -719,4 +719,3 @@ data:
 kind: ConfigMap
 metadata:
   name: free5gc-configmap
-

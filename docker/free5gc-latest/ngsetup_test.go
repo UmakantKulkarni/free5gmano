@@ -1,35 +1,34 @@
 package test_test
 
 import (
-//	"flag"
-//	"fmt"
-	"free5gc/lib/CommonConsumerTestData/UDM/TestGenAuthData"
-//	"free5gc/lib/MongoDBLibrary"
-	"free5gc/lib/nas/security"
-	"free5gc/lib/ngap"
-//	"free5gc/lib/path_util"
-//	amf_service "free5gc/src/amf/service"
-	"free5gc/src/app"
-//	ausf_service "free5gc/src/ausf/service"
-//	nrf_service "free5gc/src/nrf/service"
-//	nssf_service "free5gc/src/nssf/service"
-//	pcf_service "free5gc/src/pcf/service"
-//	smf_service "free5gc/src/smf/service"
-	"free5gc/src/test"
-//	udm_service "free5gc/src/udm/service"
-//	udr_service "free5gc/src/udr/service"
-//	"log"
-//	"os"
+	"flag"
+	"fmt"
+	"log"
+	"os"
 	"sync"
 	"testing"
-//	"time"
-
+	"time"
+	"free5gc/lib/CommonConsumerTestData/UDM/TestGenAuthData"
+	"free5gc/lib/MongoDBLibrary"
+	"free5gc/lib/nas/security"
+	"free5gc/lib/ngap"
+	"free5gc/lib/path_util"
+	amf_service "free5gc/src/amf/service"
+	"free5gc/src/app"
+	ausf_service "free5gc/src/ausf/service"
+	nrf_service "free5gc/src/nrf/service"
+	nssf_service "free5gc/src/nssf/service"
+	pcf_service "free5gc/src/pcf/service"
+	smf_service "free5gc/src/smf/service"
+	"free5gc/src/test"
+	udm_service "free5gc/src/udm/service"
+	udr_service "free5gc/src/udr/service"
 	"github.com/stretchr/testify/assert"
-//	"github.com/urfave/cli"
+	"github.com/urfave/cli"
 )
 
+var initFlag bool = true
 var NFs = []app.NetworkFunction{
-/*
 	&nrf_service.NRF{},
 	&amf_service.AMF{},
 	&smf_service.SMF{},
@@ -38,26 +37,24 @@ var NFs = []app.NetworkFunction{
 	&udm_service.UDM{},
 	&nssf_service.NSSF{},
 	&ausf_service.AUSF{},
-*/
 	//&n3iwf_service.N3IWF{},
 }
 
 func init() {
-/*
-	var init bool = true
 
 	for _, arg := range os.Args {
 		if arg == "noinit" {
-			init = false
+			initFlag = false
+			break
 		}
 	}
 
-	if init {
-		app.AppInitializeWillInitialize("")
+	if initFlag {
+		//app.AppInitializeWillInitialize("")
 		flagSet := flag.NewFlagSet("free5gc", 0)
 		flagSet.String("smfcfg", "", "SMF Config Path")
 		cli := cli.NewContext(nil, flagSet, nil)
-		err := cli.Set("smfcfg", path_util.Gofree5gcPath("free5gc/config/test/smfcfg.test.conf"))
+		err := cli.Set("smfcfg", path_util.Free5gcPath("free5gc/config/test/smfcfg.test.yaml"))
 		if err != nil {
 			log.Fatal("SMF test config error")
 			return
@@ -72,7 +69,15 @@ func init() {
 		MongoDBLibrary.SetMongoDB("free5gc", "mongodb://127.0.0.1:27017")
 		fmt.Println("MongoDB Set")
 	}
-*/
+
+}
+
+func NfTerminate() {
+	if initFlag {
+		for _, service := range NFs {
+			service.Terminate()
+		}
+	}
 }
 
 func TestNGSetup(t *testing.T) {
@@ -81,7 +86,7 @@ func TestNGSetup(t *testing.T) {
 	var recvMsg = make([]byte, 2048)
 
 	// RAN connect to AMF
-	conn, err := test.ConntectToAmf("127.0.0.1", "127.0.0.1", 38412, 9487)
+	conn, err := test.ConnectToAmf("127.0.0.1", "127.0.0.1", 38412, 9487)
 	assert.Nil(t, err)
 
 	// send NGSetupRequest Msg

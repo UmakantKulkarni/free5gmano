@@ -1,4 +1,4 @@
-FROM golang:1.14.4
+FROM golang:1.16
 
 WORKDIR /root/
 
@@ -6,7 +6,10 @@ RUN apt update -y
 RUN apt -y install git wget gcc cmake autoconf libtool pkg-config libmnl-dev libyaml-dev iputils-ping iptables tcpdump net-tools nano
 
 WORKDIR $GOPATH/src
-RUN git clone --recursive -b v3.0.4 -j `nproc` https://github.com/free5gc/free5gc.git
+RUN git clone --recursive -j `nproc` https://github.com/free5gc/free5gc.git
+RUN cd free5gc
+RUN git reset --hard b1172c3c4b9d3e1467ec1fbc349194279bc18ada
+RUN git pull
 
 WORKDIR $GOPATH/src/free5gc
 RUN go get -u github.com/sirupsen/logrus

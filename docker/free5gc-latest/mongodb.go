@@ -23,7 +23,6 @@ func toBsonM(data interface{}) bson.M {
 }
 
 func InsertAuthSubscriptionToMongoDB(ueId string, authSubs models.AuthenticationSubscription) {
-	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.authenticationData.authenticationSubscription"
 	filter := bson.M{"ueId": ueId}
 	putData := toBsonM(authSubs)
@@ -93,13 +92,17 @@ func DelAccessAndMobilitySubscriptionDataFromMongoDB(ueId string, servingPlmnId 
 }
 
 func InsertSessionManagementSubscriptionDataToMongoDB(
-	ueId string, servingPlmnId string, smData models.SessionManagementSubscriptionData) {
+	ueId string, servingPlmnId string, smDatas []models.SessionManagementSubscriptionData) {
+	var putDatas = make([]interface{}, 0, len(smDatas))
 	collName := "subscriptionData.provisionedData.smData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
-	putData := toBsonM(smData)
-	putData["ueId"] = ueId
-	putData["servingPlmnId"] = servingPlmnId
-	MongoDBLibrary.RestfulAPIPutOne(collName, filter, putData)
+	for _, smData := range smDatas {
+		putData := toBsonM(smData)
+		putData["ueId"] = ueId
+		putData["servingPlmnId"] = servingPlmnId
+		putDatas = append(putDatas, putData)
+	}
+	MongoDBLibrary.RestfulAPIPostMany(collName, filter, putDatas)
 }
 
 func GetSessionManagementDataFromMongoDB(

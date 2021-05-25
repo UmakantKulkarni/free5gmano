@@ -5,7 +5,6 @@ metadata:
 spec:
   selector:
     app: free5gc-smf
-  clusterIP: None # 10.96.100.3
   ports:
     - name: sbi
       protocol: TCP
@@ -14,7 +13,7 @@ spec:
       protocol: UDP
       port: 8805
 ---
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: free5gc-smf-deployment
@@ -28,9 +27,9 @@ spec:
       labels:
         app: free5gc-smf
     spec:
-      containers:      
+      containers:
       - name: myapp-container
-        image: free5gmano/free5gc-control-plane:stage3.0.4
+        image: umakantk/free5gc-control-plane:b1172c3
         imagePullPolicy: IfNotPresent
         command: ["/bin/sh"]
         args: ["-c", "sleep 30s && ./bin/smf"]
@@ -48,20 +47,18 @@ spec:
       - name: smfcfg
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: smfcfg.conf
             path: smfcfg.conf
       - name: uerouting
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: uerouting.yaml
             path: uerouting.yaml
       - name: free5gc
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: free5GC.conf
             path: free5GC.conf
-      
-
