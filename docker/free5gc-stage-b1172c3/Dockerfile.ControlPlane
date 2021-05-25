@@ -33,6 +33,7 @@ RUN go get github.com/free5gc/pcf/service
 RUN make pcf
 RUN go get github.com/free5gc/smf/logger
 RUN go get github.com/free5gc/smf/service
+COPY smfsvcinit $GOPATH/src/free5gc/NFs/smf/service/init.go
 RUN make smf
 RUN go get github.com/free5gc/udm/logger
 RUN go get github.com/free5gc/udm/service
@@ -40,5 +41,14 @@ RUN make udm
 RUN go get github.com/free5gc/udr/logger
 RUN go get github.com/free5gc/udr/service
 RUN make udr
+RUN go get github.com/free5gc/webconsole/backend/logger
+RUN go get github.com/free5gc/webconsole/backend/webui_service
+RUN apt -y remove cmdtest
+RUN apt -y remove yarn
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+RUN apt-get update
+RUN apt-get install -y nodejs yarn
+RUN make webconsole
 
 ENV GIN_MODE=release
