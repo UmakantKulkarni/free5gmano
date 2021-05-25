@@ -28,26 +28,26 @@ spec:
       containers:
       - name: free5gc-webui
         command: ["/bin/bash", "-c"]
-        args: ["cd webconsole && go run server.go"]
+        args: ["cd /go/src/free5gc/webconsole; go run server.go"]
         image: umakantk/free5gc-control-plane:b1172c3
         imagePullPolicy: Always
         volumeMounts:
         - name: webuicfg
-          mountPath: /go/src/free5gc/config/webuicfg.conf
-          subPath: webuicfg.conf
+          mountPath: /go/src/free5gc/config/webuicfg.yaml
+          subPath: webuicfg.yaml
         - name: free5gc
-          mountPath: /go/src/free5gc/config/free5GC.conf
-          subPath: free5GC.conf
+          mountPath: /go/src/free5gc/config/free5GC.yaml
+          subPath: free5GC.yaml
       volumes:
       - name: webuicfg
         configMap:
           name: free5gc-configmap
           items:
-          - key: webuicfg.conf
-            path: webuicfg.conf
+          - key: webuicfg.yaml
+            path: webuicfg.yaml
       - name: free5gc
         configMap:
           name: free5gc-configmap
           items:
-          - key: free5GC.conf
-            path: free5GC.conf
+          - key: free5GC.yaml
+            path: free5GC.yaml

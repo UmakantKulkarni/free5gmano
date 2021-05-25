@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  free5GC.conf: |
+  free5GC.yaml: |
     db_uri: mongodb://mongodb-svc:27017/free5GC
 
     #all logging levels
@@ -73,7 +73,7 @@ data:
         debugLevel: info
         ReportCaller: true
 
-  amfcfg.conf: |
+  amfcfg.yaml: |
     info:
       version: 1.0.1
       description: AMF initial local configuration
@@ -85,7 +85,7 @@ data:
       sbi:
         scheme: http
         registerIPv4: free5gc-amf-svc # 10.96.100.2 # IP used to register to NRF
-        bindingIPv4: free5gc-amf-svc  # IP used to bind the service
+        bindingIPv4: 0.0.0.0  # IP used to bind the service
         port: 29518
       serviceNameList:
         - namf-comm
@@ -129,7 +129,7 @@ data:
       t3512: 3600
       non3gppDeregistrationTimer: 3240
 
-  smfcfg.conf: |
+  smfcfg.yaml: |
     info:
       version: 1.0.1
       description:  initial local configuration
@@ -139,7 +139,7 @@ data:
       sbi:
         scheme: http
         registerIPv4: free5gc-smf-svc # 10.96.100.3 # IP used to register to NRF
-        bindingIPv4: free5gc-smf-svc  # IP used to bind the service
+        bindingIPv4: 0.0.0.0  # IP used to bind the service
         port: 29502
         tls:
           key: free5gc/support/TLS/smf.key
@@ -199,7 +199,7 @@ data:
       nrfUri: http://free5gc-nrf-svc:29510
 
 
-  ausfcfg.conf: |
+  ausfcfg.yaml: |
     info:
       version: 1.0.0
       description: AUSF initial local configuration
@@ -208,7 +208,7 @@ data:
       sbi:
         scheme: http
         registerIPv4: free5gc-ausf-svc # 10.96.100.4 # IP used to register to NRF
-        bindingIPv4: free5gc-ausf-svc # IP used to bind the service
+        bindingIPv4: 0.0.0.0 # IP used to bind the service
         port: 29509
       serviceNameList:
         - nausf-auth
@@ -220,7 +220,7 @@ data:
           mnc: 45
       groupId: ausfGroup001
 
-  nrfcfg.conf: |
+  nrfcfg.yaml: |
     info:
       version: 1.0.0
       description: NRF initial local configuration
@@ -240,7 +240,7 @@ data:
         - nnrf-nfm
         - nnrf-disc
 
-  nssfcfg.conf: |
+  nssfcfg.yaml: |
     info:
       version: 1.0.0
       description: NSSF initial local configuration
@@ -250,7 +250,7 @@ data:
       sbi:
         scheme: http
         registerIPv4: free5gc-nssf-svc # 10.96.100.6 # IP used to register to NRF
-        bindingIPv4: free5gc-nssf-svc  # IP used to bind the service
+        bindingIPv4: 0.0.0.0  # IP used to bind the service
         port: 29531
       serviceNameList:
         - nnssf-nsselection
@@ -564,9 +564,9 @@ data:
                 sst: 1
                 sd: 3
 
-  pcfcfg.conf: |
+  pcfcfg.yaml: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description: PCF initial local configuration
 
     configuration:
@@ -574,7 +574,7 @@ data:
       sbi:
         scheme: http
         registerIPv4: free5gc-pcf-svc # 10.96.100.9 # IP used to register to NRF
-        bindingIPv4: free5gc-pcf-svc  # IP used to bind the service
+        bindingIPv4: 0.0.0.0  # IP used to bind the service
         port: 29507
       timeFormat: 2019-01-02 15:04:05
       defaultBdtRefId: BdtPolicyId-
@@ -589,9 +589,9 @@ data:
         - serviceName: npcf-eventexposure
         - serviceName: npcf-ue-policy-control
 
-  udmcfg.conf: |
+  udmcfg.yaml: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description: UDM initial local configuration
 
     configuration:
@@ -604,7 +604,7 @@ data:
       sbi:
         scheme: http
         registerIPv4: free5gc-udm-svc # IP used to register to NRF
-        bindingIPv4: free5gc-udm-svc  # IP used to bind the service
+        bindingIPv4: 0.0.0.0  # IP used to bind the service
         port: 29503
         tls:
           log: free5gc/udmsslkey.log
@@ -633,16 +633,16 @@ data:
         udmProfileBHNPublicKey: 0472DA71976234CE833A6907425867B82E074D44EF907DFB4B3E21C1C2256EBCD15A7DED52FCBB097A4ED250E036C7B9C8C7004C4EEDC4F068CD7BF8D3F900E3B4
         udmProfileBHNPrivateKey: F1AB1074477EBCC7F554EA1C5FC368B1616730155E0041AC447D6301975FECDA
 
-  udrcfg.conf: |
+  udrcfg.yaml: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description: UDR initial local configuration
 
     configuration:
       sbi:
         scheme: http
         registerIPv4: free5gc-udr-svc # 10.96.100.8 # IP used to register to NRF
-        bindingIPv4: free5gc-udr-svc  # IP used to bind the service
+        bindingIPv4: 0.0.0.0  # IP used to bind the service
         port: 29504
       mongodb:
         name: free5gc
@@ -651,8 +651,8 @@ data:
 
   upfcfg.yaml: |
     info:
-      version: 1.0.0
-      description: UPF configuration
+      version: 1.0.1
+      description: UPF yamliguration
 
     configuration:
       # debugLevel: panic|fatal|error|warn|info|debug|trace
@@ -714,9 +714,9 @@ data:
             # The UPF's name should be consistent with smfcfg.yaml
             path: [BranchingUPF, AnchorUPF2]
 
-  webuicfg.conf: |
+  webuicfg.yaml: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description: WebUI initial local configuration
 
     configuration:

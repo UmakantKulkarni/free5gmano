@@ -35,21 +35,21 @@ spec:
         args: ["-c", "sleep 30s && ./bin/smf"]
         volumeMounts:
         - name: smfcfg
-          mountPath: /go/src/free5gc/config/smfcfg.conf
-          subPath: smfcfg.conf
+          mountPath: /go/src/free5gc/config/smfcfg.yaml
+          subPath: smfcfg.yaml
         - name: uerouting
           mountPath: /go/src/free5gc/config/uerouting.yaml
           subPath: uerouting.yaml
         - name: free5gc
-          mountPath: /go/src/free5gc/config/free5GC.conf
-          subPath: free5GC.conf
+          mountPath: /go/src/free5gc/config/free5GC.yaml
+          subPath: free5GC.yaml
       volumes:
       - name: smfcfg
         configMap:
           name: free5gc-configmap
           items:
-          - key: smfcfg.conf
-            path: smfcfg.conf
+          - key: smfcfg.yaml
+            path: smfcfg.yaml
       - name: uerouting
         configMap:
           name: free5gc-configmap
@@ -60,5 +60,5 @@ spec:
         configMap:
           name: free5gc-configmap
           items:
-          - key: free5GC.conf
-            path: free5GC.conf
+          - key: free5GC.yaml
+            path: free5GC.yaml

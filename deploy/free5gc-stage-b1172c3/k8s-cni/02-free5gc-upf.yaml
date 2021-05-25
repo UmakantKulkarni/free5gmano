@@ -43,11 +43,11 @@ spec:
         - mountPath: /dev/net/tun
           name: tun-volume
         - name: upfcfg
-          mountPath: /go/src/free5gc/src/upf/build/config/upfcfg.yaml
+          mountPath: /go/src/free5gc/NFs/upf/build/config/upfcfg.yaml
           subPath: upfcfg.yaml
         - name: free5gc
-          mountPath: /go/src/free5gc/config/free5GC.conf
-          subPath: free5GC.conf
+          mountPath: /go/src/free5gc/config/free5GC.yaml
+          subPath: free5GC.yaml
       volumes:
       - name: tun-volume
         hostPath:
@@ -62,5 +62,5 @@ spec:
         configMap:
           name: free5gc-configmap
           items:
-          - key: free5GC.conf
-            path: free5GC.conf
+          - key: free5GC.yaml
+            path: free5GC.yaml
