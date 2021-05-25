@@ -33,7 +33,7 @@ spec:
       containers:
       - name: free5gc-upf-container
         image: umakantk/free5gc-user-plane:b1172c3
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         securityContext:
           privileged: true
         command: ["/bin/sh"]

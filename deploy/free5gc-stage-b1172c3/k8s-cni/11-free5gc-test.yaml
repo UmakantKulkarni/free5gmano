@@ -32,6 +32,6 @@ spec:
         image: umakantk/free5gc-test:b1172c3
         securityContext:
           privileged: true
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         command: ["/bin/sh"]
         args: ["-c", "ip addr add 60.60.0.1 dev lo && ip link set dev lo up && sleep 3650d"]

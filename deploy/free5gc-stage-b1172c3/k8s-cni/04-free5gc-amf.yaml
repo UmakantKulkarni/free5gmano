@@ -30,7 +30,7 @@ spec:
       containers:
       - name: myapp-container
         image: umakantk/free5gc-control-plane:b1172c3
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         command: ["/bin/sh"]
         args: ["-c", "sleep 10s && ./bin/amf"]
         volumeMounts:

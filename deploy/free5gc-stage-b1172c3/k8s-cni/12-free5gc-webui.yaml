@@ -30,6 +30,7 @@ spec:
         command: ["/bin/bash", "-c"]
         args: ["cd webconsole && go run server.go"]
         image: umakantk/free5gc-control-plane:b1172c3
+        imagePullPolicy: Always
         volumeMounts:
         - name: webuicfg
           mountPath: /go/src/free5gc/config/webuicfg.conf
