@@ -17,15 +17,14 @@ ENV GOROOT=/usr/local/go
 ENV PATH=$PATH:$GOPATH/bin:$GOROOT/bin
 
 WORKDIR $GOPATH/src
-RUN git clone --recursive -b v3.0.5 -j `nproc` https://github.com/free5gc/free5gc.git
+RUN git clone --recursive -j `nproc` https://github.com/free5gc/free5gc.git
 
 WORKDIR $GOPATH/src/free5gc
-RUN git checkout master
+RUN git checkout main
 RUN git submodule sync
 RUN git submodule update --init --jobs `nproc`
-RUN git submodule foreach git checkout master
+RUN git submodule foreach git checkout main
 RUN git submodule foreach git pull --jobs `nproc`
-RUN go mod download
 RUN make amf
 RUN make ausf
 RUN make nrf

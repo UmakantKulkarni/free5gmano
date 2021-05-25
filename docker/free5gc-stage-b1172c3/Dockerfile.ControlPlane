@@ -1,0 +1,44 @@
+FROM golang:1.16
+
+WORKDIR /root/
+
+RUN apt update -y
+RUN apt -y install wget git iputils-ping tcpdump net-tools nano vim
+
+WORKDIR $GOPATH/src
+RUN git clone --recursive -j `nproc` https://github.com/free5gc/free5gc.git
+
+WORKDIR $GOPATH/src/free5gc
+RUN git checkout main
+RUN git submodule sync
+RUN git submodule update --init --jobs `nproc`
+RUN git submodule foreach git checkout main
+RUN git submodule foreach git pull --jobs `nproc`
+RUN go get github.com/free5gc/version
+RUN go get golang.org/x/sync
+RUN go get github.com/free5gc/amf/logger
+RUN go get github.com/free5gc/amf/service
+RUN make amf
+RUN go get github.com/free5gc/ausf/logger
+RUN go get github.com/free5gc/ausf/service
+RUN make ausf
+RUN go get github.com/free5gc/nrf/logger
+RUN go get github.com/free5gc/nrf/service
+RUN make nrf
+RUN go get github.com/free5gc/nssf/logger
+RUN go get github.com/free5gc/nssf/service
+RUN make nssf
+RUN go get github.com/free5gc/pcf/logger
+RUN go get github.com/free5gc/pcf/service
+RUN make pcf
+RUN go get github.com/free5gc/smf/logger
+RUN go get github.com/free5gc/smf/service
+RUN make smf
+RUN go get github.com/free5gc/udm/logger
+RUN go get github.com/free5gc/udm/service
+RUN make udm
+RUN go get github.com/free5gc/udr/logger
+RUN go get github.com/free5gc/udr/service
+RUN make udr
+
+ENV GIN_MODE=release
