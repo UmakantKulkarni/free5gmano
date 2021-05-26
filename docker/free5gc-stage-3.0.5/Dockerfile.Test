@@ -14,7 +14,7 @@ RUN git submodule foreach git checkout main
 RUN git submodule foreach git pull --jobs `nproc`
 
 WORKDIR $GOPATH/src/free5gc/test
-go mod download github.com/free5gc/pfcp
+RUN go mod download github.com/free5gc/pfcp
 COPY mytests $GOPATH/src/free5gc/test/mytests
 COPY ./*.go ./
 
