@@ -81,7 +81,7 @@ data:
     configuration:
       amfName: AMF
       ngapIpList:
-        - 0.0.0.0
+        - free5gc-amf-svc
       sbi:
         scheme: http
         registerIPv4: free5gc-amf-svc # 10.96.100.2 # IP used to register to NRF
@@ -648,7 +648,7 @@ data:
       ReportCaller: false
 
       pfcp:
-        - addr: 0.0.0.0
+        - addr: free5gc-upf-svc
 
       gtpu:
         - addr: 0.0.0.0

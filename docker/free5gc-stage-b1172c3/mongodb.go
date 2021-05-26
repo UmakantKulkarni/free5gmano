@@ -2,12 +2,11 @@ package test
 
 import (
 	"encoding/json"
-
 	"github.com/calee0219/fatal"
 	"go.mongodb.org/mongo-driver/bson"
 
-	"free5gc/lib/MongoDBLibrary"
-	"free5gc/lib/openapi/models"
+	"github.com/free5gc/MongoDBLibrary"
+	"github.com/free5gc/openapi/models"
 )
 
 func toBsonM(data interface{}) bson.M {
@@ -24,6 +23,7 @@ func toBsonM(data interface{}) bson.M {
 }
 
 func InsertAuthSubscriptionToMongoDB(ueId string, authSubs models.AuthenticationSubscription) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.authenticationData.authenticationSubscription"
 	filter := bson.M{"ueId": ueId}
 	putData := toBsonM(authSubs)
