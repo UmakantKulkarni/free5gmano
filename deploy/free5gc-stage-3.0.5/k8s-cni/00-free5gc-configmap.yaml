@@ -772,7 +772,7 @@ data:
 
   uerouting.yaml: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description: Routing information for UE
 
     ueRoutingInfo: # the list of UE routing information
