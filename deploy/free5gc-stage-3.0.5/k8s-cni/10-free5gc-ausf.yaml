@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: free5gc-ausf-svc
+spec:
+  selector:
+    app: free5gc-ausf
+  ports:
+    - name: sbi
+      protocol: TCP
+      port: 29509
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: free5gc-ausf-deployment
+spec:
+  selector:
+    matchLabels:
+      app: free5gc-ausf
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: free5gc-ausf
+    spec:
+      containers:
+      - name: myapp-container
+        image: umakantk/free5gc-control-plane:stage3.0.5
+        imagePullPolicy: Always
+        command: ["/bin/sh"]
+        args: ["-c", "sleep 10s && ./bin/ausf"]
+        volumeMounts:
+        - name: ausfcfg
+          mountPath: /go/src/free5gc/config/ausfcfg.yaml
+          subPath: ausfcfg.yaml
+      volumes:
+      - name: ausfcfg
+        configMap:
+          name: free5gc-configmap
+          items:
+          - key: ausfcfg.yaml
+            path: ausfcfg.yaml

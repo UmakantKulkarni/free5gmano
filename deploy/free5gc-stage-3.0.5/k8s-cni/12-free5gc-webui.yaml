@@ -1,0 +1,44 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: free5gc-webui-svc
+spec:
+  selector:
+    app: free5gc-webui
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 5000
+    nodePort: 31111
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: free5gc-webui-deployment
+spec:
+  selector:
+    matchLabels:
+      app: free5gc-webui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: free5gc-webui
+    spec:
+      containers:
+      - name: free5gc-webui
+        command: ["/bin/bash", "-c"]
+        args: ["cd /go/src/free5gc/webconsole; go run server.go"]
+        image: umakantk/free5gc-control-plane:stage3.0.5
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: webuicfg
+          mountPath: /go/src/free5gc/config/webuicfg.yaml
+          subPath: webuicfg.yaml
+      volumes:
+      - name: webuicfg
+        configMap:
+          name: free5gc-configmap
+          items:
+          - key: webuicfg.yaml
+            path: webuicfg.yaml
