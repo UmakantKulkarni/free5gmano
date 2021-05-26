@@ -160,7 +160,7 @@ data:
           dnnSmfInfoList:
             - dnn: internet
       pfcp:
-        addr: 0.0.0.0
+        addr: free5gc-smf-svc
       userplane_information:
         up_nodes:
           gNB1:
@@ -651,7 +651,7 @@ data:
         - addr: free5gc-upf-svc
 
       gtpu:
-        - addr: 0.0.0.0
+        - addr: free5gc-upf-svc
         # [optional] gtpu.name
         # - name: free5gc-upf-svc
         # [optional] gtpu.ifname
