@@ -755,7 +755,7 @@ data:
       ReportCaller: false
 
       pfcp:
-        - addr: 0.0.0.0
+        - addr: free5gc-upf-svc
 
       gtpu:
         - addr: 0.0.0.0

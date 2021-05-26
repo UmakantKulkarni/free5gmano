@@ -5,6 +5,7 @@ metadata:
 spec:
   selector:
     app: free5gc-upf
+  clusterIP: None # 10.96.100.10
   ports:
     - name: sbi
       port: 29518
