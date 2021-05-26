@@ -2,7 +2,7 @@ apiVersion: v1
 data:
   amfcfg.yaml: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description: AMF initial local configuration
 
     configuration:
@@ -14,47 +14,76 @@ data:
         registerIPv4: free5gc-amf-svc # 10.96.100.2 # IP used to register to NRF
         bindingIPv4: 0.0.0.0  # IP used to bind the service
         port: 29518
-      serviceNameList:
-        - namf-comm
-        - namf-evts
-        - namf-mt
-        - namf-loc
-        - namf-oam
-      servedGuamiList:
-        - plmnId:
-            mcc: 208
-            mnc: 93
-          amfId: cafe00
-      supportTaiList:
-        - plmnId:
-            mcc: 208
-            mnc: 93
-          tac: 1
-      plmnSupportList:
-        - plmnId:
-            mcc: 208
-            mnc: 93
-          snssaiList:
-            - sst: 1
-              sd: 010203
-            - sst: 1
-              sd: 112233
-      supportDnnList:
+      servedGuamiList: # Guami (Globally Unique AMF ID) list supported by this AMF
+        # <GUAMI> = <MCC><MNC><AMF ID>
+        - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+            mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+            mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+          amfId: cafe00 # AMF identifier (3 bytes hex string, range: 000000~FFFFFF)
+      supportTaiList:  # the TAI (Tracking Area Identifier) list supported by this AMF
+        - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+            mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+            mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+          tac: 1 # Tracking Area Code (uinteger, range: 0~16777215)
+      plmnSupportList: # the PLMNs (Public land mobile network) list supported by this AMF
+        - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+            mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+            mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+          snssaiList: # the S-NSSAI (Single Network Slice Selection Assistance Information) list supported by this AMF
+            - sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+              sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+            - sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+              sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+      supportDnnList:  # the DNN (Data Network Name) list supported by this AMF
         - internet
       nrfUri: http://free5gc-nrf-svc:29510
-      security:
-        integrityOrder:
-          # - NIA0
+      security:  # NAS security parameters
+        integrityOrder: # the priority of integrity algorithms
           - NIA2
-        cipheringOrder:
+          # - NIA0
+        cipheringOrder: # the priority of ciphering algorithms
           - NEA0
           # - NEA2
-      networkName:
+      networkName:  # the name of this core network
         full: free5GC
         short: free
-      t3502: 720
-      t3512: 3600
-      non3gppDeregistrationTimer: 3240
+      networkFeatureSupport5GS: # 5gs Network Feature Support IE, refer to TS 24.501
+        enable: true # append this IE in Registration accept or not
+        imsVoPS: 0 # IMS voice over PS session indicator (uinteger, range: 0~1)
+        emc: 0 # Emergency service support indicator for 3GPP access (uinteger, range: 0~3)
+        emf: 0 # Emergency service fallback indicator for 3GPP access (uinteger, range: 0~3)
+        iwkN26: 0 # Interworking without N26 interface indicator (uinteger, range: 0~1)
+        mpsi: 0 # MPS indicator (uinteger, range: 0~1)
+        emcN3: 0 # Emergency service support indicator for Non-3GPP access (uinteger, range: 0~1)
+        mcsi: 0 # MCS indicator (uinteger, range: 0~1)
+      t3502Value: 720  # timer value (seconds) at UE side
+      t3512Value: 3600 # timer value (seconds) at UE side
+      non3gppDeregistrationTimerValue: 3240 # timer value (seconds) at UE side
+      # retransmission timer for paging message
+      t3513:
+        enable: true     # true or false
+        expireTime: 6s   # default is 6 seconds
+        maxRetryTimes: 4 # the max number of retransmission
+      # retransmission timer for NAS Deregistration Request message
+      t3522:
+        enable: true     # true or false
+        expireTime: 6s   # default is 6 seconds
+        maxRetryTimes: 4 # the max number of retransmission
+      # retransmission timer for NAS Registration Accept message
+      t3550:
+        enable: true     # true or false
+        expireTime: 6s   # default is 6 seconds
+        maxRetryTimes: 4 # the max number of retransmission
+      # retransmission timer for NAS Authentication Request/Security Mode Command message
+      t3560:
+        enable: true     # true or false
+        expireTime: 6s   # default is 6 seconds
+        maxRetryTimes: 4 # the max number of retransmission
+      # retransmission timer for NAS Notification message
+      t3565:
+        enable: true     # true or false
+        expireTime: 6s   # default is 6 seconds
+        maxRetryTimes: 4 # the max number of retransmission
     # the kind of log output
     # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
     # ReportCaller: enable the caller report or not, value: true or false
@@ -84,7 +113,7 @@ data:
 
   smfcfg.yaml: |
     info:
-      version: 1.0.0
+      version: 1.0.1
       description:  initial local configuration
 
     configuration:
@@ -101,17 +130,21 @@ data:
         - nsmf-pdusession
         - nsmf-event-exposure
         - nsmf-oam
-      snssai_info:
-        - sNssai:
-            sst: 1
-            sd: 010203
-          dnnSmfInfoList:
-            - dnn: internet
-        - sNssai:
-            sst: 1
-            sd: 112233
-          dnnSmfInfoList:
-            - dnn: internet
+      snssaiInfos: # the S-NSSAI (Single Network Slice Selection Assistance Information) list supported by this AMF
+        - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+            sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+            sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+          dnnInfos: # DNN information list
+            - dnn: internet # Data Network Name
+              dns: # the IP address of DNS
+                ipv4: 8.8.8.8
+        - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+            sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+            sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+          dnnInfos: # DNN information list
+            - dnn: internet # Data Network Name
+              dns: # the IP address of DNS
+                ipv4: 8.8.8.8
       pfcp:
         addr: 0.0.0.0
       userplane_information:
@@ -130,25 +163,21 @@ data:
                   - dnn: internet
                     pools:
                       - cidr: 60.60.0.0/16
+              - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+                  sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                  sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                dnnUpfInfoList: # DNN information list for this S-NSSAI
+                  - dnn: internet
+                    pools:
+                      - cidr: 60.61.0.0/16
             interfaces: # Interface list for this UPF
               - interfaceType: N3 # the type of the interface (N3 or N9)
                 endpoints: # the IP address of this N3/N9 interface on this UPF
                   - free5gc-upf-svc
                 networkInstance: internet # Data Network Name (DNN)
-
         links:
           - A: gNB1
             B: UPF
-      ue_subnet: 60.60.0.0/16
-      dnn:
-        internet:
-          dns:
-            ipv4: 8.8.8.8
-            ipv6: 2001:4860:4860::8888
-        internet2:
-          dns:
-            ipv4: 8.8.4.4
-            ipv6: 2001:4860:4860::8844
       nrfUri: http://free5gc-nrf-svc:29510
     # the kind of log output
     # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
