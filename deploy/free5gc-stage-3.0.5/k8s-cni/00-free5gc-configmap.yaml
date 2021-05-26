@@ -8,7 +8,7 @@ data:
     configuration:
       amfName: AMF
       ngapIpList:
-        - 0.0.0.0
+        - free5gc-amf-svc
       sbi:
         scheme: http
         registerIPv4: free5gc-amf-svc # 10.96.100.2 # IP used to register to NRF
@@ -61,27 +61,27 @@ data:
       non3gppDeregistrationTimerValue: 3240 # timer value (seconds) at UE side
       # retransmission timer for paging message
       t3513:
-        enable: true     # true or false
+        enable: false     # true or false
         expireTime: 6s   # default is 6 seconds
         maxRetryTimes: 4 # the max number of retransmission
       # retransmission timer for NAS Deregistration Request message
       t3522:
-        enable: true     # true or false
+        enable: false     # true or false
         expireTime: 6s   # default is 6 seconds
         maxRetryTimes: 4 # the max number of retransmission
       # retransmission timer for NAS Registration Accept message
       t3550:
-        enable: true     # true or false
+        enable: false     # true or false
         expireTime: 6s   # default is 6 seconds
         maxRetryTimes: 4 # the max number of retransmission
       # retransmission timer for NAS Authentication Request/Security Mode Command message
       t3560:
-        enable: true     # true or false
+        enable: false     # true or false
         expireTime: 6s   # default is 6 seconds
         maxRetryTimes: 4 # the max number of retransmission
       # retransmission timer for NAS Notification message
       t3565:
-        enable: true     # true or false
+        enable: false     # true or false
         expireTime: 6s   # default is 6 seconds
         maxRetryTimes: 4 # the max number of retransmission
     # the kind of log output
