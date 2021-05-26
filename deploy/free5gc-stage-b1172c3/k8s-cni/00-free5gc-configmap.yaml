@@ -113,7 +113,7 @@ data:
           dnnSmfInfoList:
             - dnn: internet
       pfcp:
-        addr: free5gc-smf-svc
+        addr: 0.0.0.0
       userplane_information:
         up_nodes:
           gNB1:
