@@ -5,7 +5,7 @@ metadata:
 spec:
   selector:
     app: free5gc-webui
-  type: NodePort
+  type: LoadBalancer
   ports:
   - protocol: TCP
     port: 5000
@@ -41,12 +41,12 @@ spec:
       - name: webuicfg
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: webuicfg.conf
             path: webuicfg.conf
       - name: free5gc
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: free5GC.conf
             path: free5GC.conf

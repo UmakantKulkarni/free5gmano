@@ -7,7 +7,6 @@ spec:
   - port: 27017
   selector:
     app: free5gc-mongodb
-  clusterIP: None
 ---
 apiVersion: apps/v1
 kind: Deployment

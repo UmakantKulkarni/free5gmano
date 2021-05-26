@@ -5,13 +5,12 @@ metadata:
 spec:
   selector:
     app: free5gc-udr
-  clusterIP: None # 10.96.100.8
   ports:
     - name: sbi
       protocol: TCP
       port: 29504
 ---
-apiVersion: apps/v1 
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: free5gc-udr-deployment
@@ -25,7 +24,7 @@ spec:
       labels:
         app: free5gc-udr
     spec:
-      containers:      
+      containers:
       - name: myapp-container
         image: free5gmano/free5gc-control-plane:stage3.0.4
         imagePullPolicy: IfNotPresent
@@ -42,13 +41,12 @@ spec:
       - name: udrcfg
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: udrcfg.conf
             path: udrcfg.conf
       - name: free5gc
         configMap:
           name: free5gc-configmap
-          items: 
+          items:
           - key: free5GC.conf
             path: free5GC.conf
-      
