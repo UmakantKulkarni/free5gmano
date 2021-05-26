@@ -166,9 +166,11 @@ data:
           gNB1:
             type: AN
             an_ip: free5gc-test-svc # 10.96.100.50
+            dnn: internet
           UPF:
             type: UPF
             node_id: free5gc-upf-svc # 10.96.100.10
+            dnn: internet
 
         links:
           - A: gNB1
