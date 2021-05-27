@@ -86,7 +86,7 @@ func RunRegTrans(imsiStr string) {
 	CheckErr(err, "ConnectToUpf")
 
 	// send NGSetupRequest Msg
-	sendMsg, err := test.GetNGSetupRequest([]byte("\x00\x01\x02"), 24, "free5gc")
+	sendMsg, err = test.GetNGSetupRequest([]byte("\x00\x01\x02"), 24, "free5gc")
 	CheckErr(err, "GetNGSetupRequest")
 	_, err = conn.Write(sendMsg)
 	CheckErr(err, "Write(sendMsg)")
