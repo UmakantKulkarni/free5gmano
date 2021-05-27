@@ -672,30 +672,11 @@ data:
 
     ueRoutingInfo:
       - SUPI: imsi-2089300007487
-        AN: free5gc-upf-svc # 10.96.100.10
+        AN: free5gc-test-svc # 10.96.100.10
         PathList:
           - DestinationIP: 60.60.0.100
             UPF: !!seq
-              - BranchingUPF
-              - AnchorUPF1
-
-          - DestinationIP: 60.60.0.103
-            UPF: !!seq
-              - BranchingUPF
-              - AnchorUPF2
-
-      - SUPI: imsi-2089300007486
-        AN: 10.200.200.102
-        PathList:
-          - DestinationIP: 10.0.0.10
-            UPF: !!seq
-              - BranchingUPF
-              - AnchorUPF1
-
-          - DestinationIP: 10.0.0.11
-            UPF: !!seq
-              - BranchingUPF
-              - AnchorUPF2
+              - UPF
 
     routeProfile:
       MEC1:

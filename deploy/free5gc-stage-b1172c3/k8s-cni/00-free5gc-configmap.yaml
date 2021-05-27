@@ -8,11 +8,11 @@ data:
     configuration:
       amfName: AMF
       ngapIpList:
-        - 0.0.0.0
+        - free5gc-amf-svc
       sbi:
         scheme: http
         registerIPv4: free5gc-amf-svc # 10.96.100.2 # IP used to register to NRF
-        bindingIPv4: 0.0.0.0  # IP used to bind the service
+        bindingIPv4: free5gc-amf-svc  # IP used to bind the service
         port: 29518
       serviceNameList:
         - namf-comm
@@ -20,40 +20,50 @@ data:
         - namf-mt
         - namf-loc
         - namf-oam
-      servedGuamiList:
-        - plmnId:
-            mcc: 208
-            mnc: 93
-          amfId: cafe00
-      supportTaiList:
-        - plmnId:
-            mcc: 208
-            mnc: 93
-          tac: 1
-      plmnSupportList:
-        - plmnId:
-            mcc: 208
-            mnc: 93
-          snssaiList:
-            - sst: 1
-              sd: 010203
-            - sst: 1
-              sd: 112233
-      supportDnnList:
+      servedGuamiList: # Guami (Globally Unique AMF ID) list supported by this AMF
+        # <GUAMI> = <MCC><MNC><AMF ID>
+        - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+            mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+            mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+          amfId: cafe00 # AMF identifier (3 bytes hex string, range: 000000~FFFFFF)
+      supportTaiList:  # the TAI (Tracking Area Identifier) list supported by this AMF
+        - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+            mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+            mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+          tac: 1 # Tracking Area Code (uinteger, range: 0~16777215)
+      plmnSupportList: # the PLMNs (Public land mobile network) list supported by this AMF
+        - plmnId: # Public Land Mobile Network ID, <PLMN ID> = <MCC><MNC>
+            mcc: 208 # Mobile Country Code (3 digits string, digit: 0~9)
+            mnc: 93 # Mobile Network Code (2 or 3 digits string, digit: 0~9)
+          snssaiList: # the S-NSSAI (Single Network Slice Selection Assistance Information) list supported by this AMF
+            - sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+              sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+            - sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+              sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+      supportDnnList:  # the DNN (Data Network Name) list supported by this AMF
         - internet
       nrfUri: http://free5gc-nrf-svc:29510
-      security:
-        integrityOrder:
-          # - NIA0
+      security:  # NAS security parameters
+        integrityOrder: # the priority of integrity algorithms
           - NIA2
-        cipheringOrder:
+          # - NIA0
+        cipheringOrder: # the priority of ciphering algorithms
           - NEA0
           # - NEA2
-      networkName:
+      networkName:  # the name of this core network
         full: free5GC
         short: free
-      t3502: 720
-      t3512: 3600
+      networkFeatureSupport5GS: # 5gs Network Feature Support IE, refer to TS 24.501
+        enable: true # append this IE in Registration accept or not
+        imsVoPS: 0 # IMS voice over PS session indicator (uinteger, range: 0~1)
+        emc: 0 # Emergency service support indicator for 3GPP access (uinteger, range: 0~3)
+        emf: 0 # Emergency service fallback indicator for 3GPP access (uinteger, range: 0~3)
+        iwkN26: 0 # Interworking without N26 interface indicator (uinteger, range: 0~1)
+        mpsi: 0 # MPS indicator (uinteger, range: 0~1)
+        emcN3: 0 # Emergency service support indicator for Non-3GPP access (uinteger, range: 0~1)
+        mcsi: 0 # MCS indicator (uinteger, range: 0~1)
+      t3502Value: 720  # timer value (seconds) at UE side
+      t3512Value: 3600 # timer value (seconds) at UE side
       non3gppDeregistrationTimer: 3240
     # the kind of log output
     # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
@@ -92,7 +102,7 @@ data:
       sbi:
         scheme: http
         registerIPv4: free5gc-smf-svc # 10.96.100.3 # IP used to register to NRF
-        bindingIPv4: 0.0.0.0  # IP used to bind the service
+        bindingIPv4: free5gc-smf-svc  # IP used to bind the service
         port: 29502
         tls:
           key: free5gc/support/TLS/smf.key
@@ -101,19 +111,23 @@ data:
         - nsmf-pdusession
         - nsmf-event-exposure
         - nsmf-oam
-      snssai_info:
-        - sNssai:
-            sst: 1
-            sd: 010203
-          dnnSmfInfoList:
-            - dnn: internet
-        - sNssai:
-            sst: 1
-            sd: 112233
-          dnnSmfInfoList:
-            - dnn: internet
+      snssaiInfos: # the S-NSSAI (Single Network Slice Selection Assistance Information) list supported by this AMF
+        - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+            sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+            sd: 010203 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+          dnnInfos: # DNN information list
+            - dnn: internet # Data Network Name
+              dns: # the IP address of DNS
+                ipv4: 8.8.8.8
+        - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+            sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+            sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+          dnnInfos: # DNN information list
+            - dnn: internet # Data Network Name
+              dns: # the IP address of DNS
+                ipv4: 8.8.8.8
       pfcp:
-        addr: 0.0.0.0
+        addr: free5gc-smf-svc
       userplane_information:
         up_nodes:
           gNB1:
@@ -130,25 +144,21 @@ data:
                   - dnn: internet
                     pools:
                       - cidr: 60.60.0.0/16
+              - sNssai: # S-NSSAI (Single Network Slice Selection Assistance Information)
+                  sst: 1 # Slice/Service Type (uinteger, range: 0~255)
+                  sd: 112233 # Slice Differentiator (3 bytes hex string, range: 000000~FFFFFF)
+                dnnUpfInfoList: # DNN information list for this S-NSSAI
+                  - dnn: internet
+                    pools:
+                      - cidr: 60.61.0.0/16
             interfaces: # Interface list for this UPF
               - interfaceType: N3 # the type of the interface (N3 or N9)
                 endpoints: # the IP address of this N3/N9 interface on this UPF
                   - free5gc-upf-svc
                 networkInstance: internet # Data Network Name (DNN)
-
         links:
           - A: gNB1
             B: UPF
-      ue_subnet: 60.60.0.0/16
-      dnn:
-        internet:
-          dns:
-            ipv4: 8.8.8.8
-            ipv6: 2001:4860:4860::8888
-        internet2:
-          dns:
-            ipv4: 8.8.4.4
-            ipv6: 2001:4860:4860::8844
       nrfUri: http://free5gc-nrf-svc:29510
     # the kind of log output
     # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
@@ -647,27 +657,15 @@ data:
           pem: free5gc/support/TLS/udm.pem
           key: free5gc/support/TLS/udm.key
 
-      udrclient:
-        scheme: http
-        ipv4Addr: free5gc-udr-svc
-        port: 29504
-
-      nrfclient:
-        scheme: http
-        ipv4Addr: free5gc-nrf-svc
-        port: 29510
       nrfUri: http://free5gc-nrf-svc:29510
 
       # test data set from TS33501-f60 Annex C.4
-      # udmProfileAHNPublicKey: 5a8d38864820197c3394b92613b20b91633cbd897119273bf8e4a6f4eec0a650
-      # udmProfileAHNPrivateKey: c53c22208b61860b06c62e5406a7b330c2b577aa5558981510d128247d38bd1d
-      # udmProfileBHNPublicKey: 0472DA71976234CE833A6907425867B82E074D44EF907DFB4B3E21C1C2256EBCD15A7DED52FCBB097A4ED250E036C7B9C8C7004C4EEDC4F068CD7BF8D3F900E3B4
-      # udmProfileBHNPrivateKey: F1AB1074477EBCC7F554EA1C5FC368B1616730155E0041AC447D6301975FECDA
       keys:
         udmProfileAHNPublicKey: 5a8d38864820197c3394b92613b20b91633cbd897119273bf8e4a6f4eec0a650
         udmProfileAHNPrivateKey: c53c22208b61860b06c62e5406a7b330c2b577aa5558981510d128247d38bd1d
         udmProfileBHNPublicKey: 0472DA71976234CE833A6907425867B82E074D44EF907DFB4B3E21C1C2256EBCD15A7DED52FCBB097A4ED250E036C7B9C8C7004C4EEDC4F068CD7BF8D3F900E3B4
         udmProfileBHNPrivateKey: F1AB1074477EBCC7F554EA1C5FC368B1616730155E0041AC447D6301975FECDA
+
     # the kind of log output
     # debugLevel: how detailed to output, value: trace, debug, info, warn, error, fatal, panic
     # ReportCaller: enable the caller report or not, value: true or false
@@ -726,10 +724,10 @@ data:
       ReportCaller: false
 
       pfcp:
-        - addr: 0.0.0.0
+        - addr: free5gc-upf-svc
 
       gtpu:
-        - addr: 0.0.0.0
+        - addr: free5gc-upf-svc
         # [optional] gtpu.name
         # - name: free5gc-upf-svc
         # [optional] gtpu.ifname
@@ -750,34 +748,18 @@ data:
       UE1: # Group Name
         members:
         - imsi-2089300007487 # Subscription Permanent Identifier of the UE
-        topology: # Network topology for this group (Uplink: A->B, Downlink: B->A)
+        - imsi-2089300000001 # Subscription Permanent Identifier of the UE
+        topology:
+        # Network topology for this group (Uplink: A->B, Downlink: B->A)
         # default path derived from this topology
         # node name should be consistent with smfcfg.yaml
           - A: gNB1
-            B: BranchingUPF
-          - A: BranchingUPF
-            B: AnchorUPF1
+            B: UPF
         specificPath:
           - dest: 60.60.0.103/32 # the destination IP address on Data Network (DN)
             # the order of UPF nodes in this path. We use the UPF's name to represent each UPF node.
             # The UPF's name should be consistent with smfcfg.yaml
-            path: [BranchingUPF, AnchorUPF2]
-
-      UE2: # Group Name
-        members:
-        - imsi-2089300007486 # Subscription Permanent Identifier of the UE
-        topology: # Network topology for this group (Uplink: A->B, Downlink: B->A)
-        # default path derived from this topology
-        # node name should be consistent with smfcfg.yaml
-          - A: gNB1
-            B: BranchingUPF
-          - A: BranchingUPF
-            B: AnchorUPF1
-        specificPath:
-          - dest: 10.0.0.11/32 # the destination IP address on Data Network (DN)
-            # the order of UPF nodes in this path. We use the UPF's name to represent each UPF node.
-            # The UPF's name should be consistent with smfcfg.yaml
-            path: [BranchingUPF, AnchorUPF2]
+            path: [UPF]
 
   webuicfg.yaml: |
     info:

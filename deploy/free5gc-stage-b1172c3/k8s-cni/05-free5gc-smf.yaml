@@ -5,6 +5,7 @@ metadata:
 spec:
   selector:
     app: free5gc-smf
+  clusterIP: None
   ports:
     - name: sbi
       protocol: TCP
