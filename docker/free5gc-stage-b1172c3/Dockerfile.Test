@@ -20,5 +20,7 @@ COPY ./*.go ./
 
 WORKDIR $GOPATH/src/free5gc/test/mytests
 RUN go build reg.go
+RUN go build delSesDbData.go
+RUN go build app.go
 
 ENV GIN_MODE=release

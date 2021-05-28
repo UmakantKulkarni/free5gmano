@@ -1,6 +1,7 @@
 package main
 
 import (
+  "test"
 	"fmt"
 	"golang.org/x/net/http2"
 	"crypto/tls"
@@ -11,6 +12,10 @@ import (
 	"io/ioutil"
 )
 
+const ranN2Ipv4Addr string = "10.244.1.8"
+const amfN2Ipv4Addr string = "10.244.2.3"
+const ranN3Ipv4Addr string = "10.244.1.8"
+const upfN3Ipv4Addr string = "10.244.1.3"
 var enableLogging = true
 
 func main() {
@@ -25,7 +30,7 @@ func main() {
 // This server only supports "H2C prior knowledge".
 // You can add standard HTTP/2 support by adding a TLS config.
 func H2CServerPrior() {
-	client := http.Client{
+	_ = http.Client{
 		Transport: &http2.Transport{
 			// So http2.Transport doesn't complain the URL scheme isn't 'https'
 			AllowHTTP: true,
@@ -38,27 +43,19 @@ func H2CServerPrior() {
 	server := http2.Server{}
 	imsi := 2089300000000
   l, err := net.Listen("tcp", "0.0.0.0:80")
-  CheckErr(err, "while listening")
+  test.CheckErr(err, "while listening")
 
 	log.Printf("Listening [0.0.0.0:80]...\n")
 	for {
 		conn, err := l.Accept()
-		CheckErr(err, "during accept")
+		test.CheckErr(err, "during accept")
 
     imsi = imsi + 1
 		server.ServeConn(conn, &http2.ServeConnOpts{
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 				log.Printf("New Connection: %+v\n", r)
-        RunRegTrans(strconv.Itoa(imsi))
+        test.RunRegTrans(strconv.Itoa(imsi), ranN2Ipv4Addr, amfN2Ipv4Addr, ranN3Ipv4Addr, upfN3Ipv4Addr)
 			}),
 		})
 	}
-}
-
-// Check for Error
-func CheckErr(err error, msg string) {
-	if err == nil {
-		return
-	}
-	log.Fatalf("ERROR: %s: %s\n", msg, err)
 }
