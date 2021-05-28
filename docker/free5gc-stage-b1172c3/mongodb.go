@@ -32,6 +32,7 @@ func InsertAuthSubscriptionToMongoDB(ueId string, authSubs models.Authentication
 }
 
 func GetAuthSubscriptionFromMongoDB(ueId string) (authSubs *models.AuthenticationSubscription) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.authenticationData.authenticationSubscription"
 	filter := bson.M{"ueId": ueId}
 	getData := MongoDBLibrary.RestfulAPIGetOne(collName, filter)
@@ -51,6 +52,7 @@ func GetAuthSubscriptionFromMongoDB(ueId string) (authSubs *models.Authenticatio
 }
 
 func DelAuthSubscriptionToMongoDB(ueId string) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.authenticationData.authenticationSubscription"
 	filter := bson.M{"ueId": ueId}
 	MongoDBLibrary.RestfulAPIDeleteMany(collName, filter)
@@ -58,6 +60,7 @@ func DelAuthSubscriptionToMongoDB(ueId string) {
 
 func InsertAccessAndMobilitySubscriptionDataToMongoDB(
 	ueId string, amData models.AccessAndMobilitySubscriptionData, servingPlmnId string) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.provisionedData.amData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
 	putData := toBsonM(amData)
@@ -68,6 +71,7 @@ func InsertAccessAndMobilitySubscriptionDataToMongoDB(
 
 func GetAccessAndMobilitySubscriptionDataFromMongoDB(
 	ueId string, servingPlmnId string) (amData *models.AccessAndMobilitySubscriptionData) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.provisionedData.amData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
 	getData := MongoDBLibrary.RestfulAPIGetOne(collName, filter)
@@ -87,6 +91,7 @@ func GetAccessAndMobilitySubscriptionDataFromMongoDB(
 }
 
 func DelAccessAndMobilitySubscriptionDataFromMongoDB(ueId string, servingPlmnId string) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.provisionedData.amData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
 	MongoDBLibrary.RestfulAPIDeleteMany(collName, filter)
@@ -94,6 +99,7 @@ func DelAccessAndMobilitySubscriptionDataFromMongoDB(ueId string, servingPlmnId 
 
 func InsertSessionManagementSubscriptionDataToMongoDB(
 	ueId string, servingPlmnId string, smDatas []models.SessionManagementSubscriptionData) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	var putDatas = make([]interface{}, 0, len(smDatas))
 	collName := "subscriptionData.provisionedData.smData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
@@ -108,6 +114,7 @@ func InsertSessionManagementSubscriptionDataToMongoDB(
 
 func GetSessionManagementDataFromMongoDB(
 	ueId string, servingPlmnId string) (amData *models.SessionManagementSubscriptionData) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.provisionedData.smData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
 	getData := MongoDBLibrary.RestfulAPIGetOne(collName, filter)
@@ -127,6 +134,7 @@ func GetSessionManagementDataFromMongoDB(
 }
 
 func DelSessionManagementSubscriptionDataFromMongoDB(ueId string, servingPlmnId string) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.provisionedData.smData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
 	MongoDBLibrary.RestfulAPIDeleteMany(collName, filter)
@@ -134,6 +142,7 @@ func DelSessionManagementSubscriptionDataFromMongoDB(ueId string, servingPlmnId 
 
 func InsertSmfSelectionSubscriptionDataToMongoDB(
 	ueId string, smfSelData models.SmfSelectionSubscriptionData, servingPlmnId string) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.provisionedData.smfSelectionSubscriptionData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
 	putData := toBsonM(smfSelData)
@@ -144,6 +153,7 @@ func InsertSmfSelectionSubscriptionDataToMongoDB(
 
 func GetSmfSelectionSubscriptionDataFromMongoDB(
 	ueId string, servingPlmnId string) (smfSelData *models.SmfSelectionSubscriptionData) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.provisionedData.smfSelectionSubscriptionData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
 	getData := MongoDBLibrary.RestfulAPIGetOne(collName, filter)
@@ -163,12 +173,14 @@ func GetSmfSelectionSubscriptionDataFromMongoDB(
 }
 
 func DelSmfSelectionSubscriptionDataFromMongoDB(ueId string, servingPlmnId string) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "subscriptionData.provisionedData.smfSelectionSubscriptionData"
 	filter := bson.M{"ueId": ueId, "servingPlmnId": servingPlmnId}
 	MongoDBLibrary.RestfulAPIDeleteMany(collName, filter)
 }
 
 func InsertAmPolicyDataToMongoDB(ueId string, amPolicyData models.AmPolicyData) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "policyData.ues.amData"
 	filter := bson.M{"ueId": ueId}
 	putData := toBsonM(amPolicyData)
@@ -177,6 +189,7 @@ func InsertAmPolicyDataToMongoDB(ueId string, amPolicyData models.AmPolicyData) 
 }
 
 func GetAmPolicyDataFromMongoDB(ueId string) (amPolicyData *models.AmPolicyData) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "policyData.ues.amData"
 	filter := bson.M{"ueId": ueId}
 	getData := MongoDBLibrary.RestfulAPIGetOne(collName, filter)
@@ -196,12 +209,14 @@ func GetAmPolicyDataFromMongoDB(ueId string) (amPolicyData *models.AmPolicyData)
 }
 
 func DelAmPolicyDataFromMongoDB(ueId string) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "policyData.ues.amData"
 	filter := bson.M{"ueId": ueId}
 	MongoDBLibrary.RestfulAPIDeleteMany(collName, filter)
 }
 
 func InsertSmPolicyDataToMongoDB(ueId string, smPolicyData models.SmPolicyData) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "policyData.ues.smData"
 	filter := bson.M{"ueId": ueId}
 	putData := toBsonM(smPolicyData)
@@ -210,6 +225,7 @@ func InsertSmPolicyDataToMongoDB(ueId string, smPolicyData models.SmPolicyData) 
 }
 
 func GetSmPolicyDataFromMongoDB(ueId string) (smPolicyData *models.SmPolicyData) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "policyData.ues.smData"
 	filter := bson.M{"ueId": ueId}
 	getData := MongoDBLibrary.RestfulAPIGetOne(collName, filter)
@@ -229,6 +245,7 @@ func GetSmPolicyDataFromMongoDB(ueId string) (smPolicyData *models.SmPolicyData)
 }
 
 func DelSmPolicyDataFromMongoDB(ueId string) {
+	MongoDBLibrary.SetMongoDB("free5gc", "mongodb://mongodb-svc:27017")
 	collName := "policyData.ues.smData"
 	filter := bson.M{"ueId": ueId}
 	MongoDBLibrary.RestfulAPIDeleteMany(collName, filter)
