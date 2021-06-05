@@ -38,7 +38,7 @@ spec:
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: mongodb-pv-volume
+  name: mongodb-pv-volume-free5gc
   labels:
     type: local
 spec:
@@ -52,7 +52,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mongodb-pv-claim
+  name: mongodb-pv-claim-free5gc
 spec:
   accessModes:
     - ReadWriteOnce
