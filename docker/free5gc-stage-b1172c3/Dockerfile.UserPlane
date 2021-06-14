@@ -6,9 +6,10 @@ RUN apt update -y
 RUN apt -y install git wget gcc cmake autoconf libtool pkg-config libmnl-dev libyaml-dev iputils-ping iptables tcpdump net-tools nano vim
 
 WORKDIR $GOPATH/src
-RUN git clone --recursive -j `nproc` https://github.com/free5gc/free5gc.git
+RUN git clone --recursive -j `nproc` https://github.com/UmakantKulkarni/free5gc
 
 WORKDIR $GOPATH/src/free5gc
+RUN cd $GOPATH/src/free5gc/NFs/upf && git checkout upf_09d8c32 && git pull
 RUN go get -u github.com/sirupsen/logrus
 RUN mkdir -p $GOPATH/src/free5gc/NFs/upf/build
 
