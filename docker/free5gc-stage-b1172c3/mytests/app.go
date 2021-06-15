@@ -58,7 +58,7 @@ func main() {
 
 }
 
-func H2CServerPrior(AmfConn *sctp.SCTPConn, ranN3Ipv4Addr string) {
+func H2CServerPrior(amfConn *sctp.SCTPConn, ranN3Ipv4Addr string) {
 	_ = http.Client{
 		Transport: &http2.Transport{
 			// So http2.Transport doesn't complain the URL scheme isn't 'https'
@@ -87,7 +87,7 @@ func H2CServerPrior(AmfConn *sctp.SCTPConn, ranN3Ipv4Addr string) {
 		server.ServeConn(conn, &http2.ServeConnOpts{
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			log.Printf("New Connection: %+v\n", r)
-			test.RunRegTrans(AmfConn, strconv.Itoa(imsi), ranN3Ipv4Addr, ueCount)
+			test.RunRegTrans(amfConn, strconv.Itoa(imsi), ranN3Ipv4Addr, ueCount)
 			}),
 		})
 	}
