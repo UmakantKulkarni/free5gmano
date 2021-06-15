@@ -2,9 +2,7 @@ package test
 
 import (
         "time"
-        "net"
 				"strconv"
-        "encoding/hex"
         "github.com/free5gc/CommonConsumerTestData/UDM/TestGenAuthData"
         "github.com/free5gc/nas"
         "github.com/free5gc/nas/nasMessage"
@@ -14,11 +12,12 @@ import (
         "github.com/free5gc/ngap"
         "github.com/free5gc/ngap/ngapType"
         "github.com/free5gc/openapi/models"
-        "golang.org/x/net/icmp"
-        "golang.org/x/net/ipv4"
-				//"git.cs.nctu.edu.tw/calee/sctp"
+				"git.cs.nctu.edu.tw/calee/sctp"
 				"log"
 )
+
+var n int
+var recvMsg = make([]byte, 2048)
 
 // Check for Error
 func CheckErr(err error, msg string) {
@@ -47,38 +46,13 @@ func GetMobileIdentity5GS(imsi string) (uint64, uint64, uint64, uint64) {
 	return a3, b3, c3, d3
 }
 
-func RunRegTrans(imsiStr string, ranN2Ipv4Addr string, amfN2Ipv4Addr string, ranN3Ipv4Addr string, upfN3Ipv4Addr string) {
-	var n int
-	var sendMsg []byte
-	var recvMsg = make([]byte, 2048)
-
-	// RAN connect to AMF
-	conn, err := ConnectToAmf(amfN2Ipv4Addr, ranN2Ipv4Addr, 38412, 9487)
-	CheckErr(err, "ConnectToAmf")
-
-	// RAN connect to UPF
-	upfConn, err := ConnectToUpf(ranN3Ipv4Addr, upfN3Ipv4Addr, 2152, 2152)
-	CheckErr(err, "ConnectToUpf")
-
-	// send NGSetupRequest Msg
-	sendMsg, err = GetNGSetupRequest([]byte("\x00\x01\x02"), 24, "free5gc")
-	CheckErr(err, "GetNGSetupRequest")
-	_, err = conn.Write(sendMsg)
-	CheckErr(err, "Write(sendMsg)")
-
-	// receive NGSetupResponse Msg
-	n, err = conn.Read(recvMsg)
-	CheckErr(err, "Read(recvMsg)")
-	ngapPdu, err := ngap.Decoder(recvMsg[:n])
-	CheckErr(err, "ngap.Decoder")
-	if ngapPdu.Present != ngapType.NGAPPDUPresentSuccessfulOutcome && ngapPdu.SuccessfulOutcome.ProcedureCode.Value != ngapType.ProcedureCodeNGSetup {
-		log.Fatalf("No NGSetupResponse received.")
-	}
-
+func RunRegTrans(conn *sctp.SCTPConn, imsiStr string, ranN3Ipv4Addr string, ueCount int) {
+ 
 	// New UE
 	// ue := NewRanUeContext("imsi-2089300007487", 1, security.AlgCiphering128NEA2, security.AlgIntegrity128NIA2)
 	ue := NewRanUeContext(string("imsi-")+string(imsiStr), 1, security.AlgCiphering128NEA0, security.AlgIntegrity128NIA2)
-	ue.AmfUeNgapId = 1
+	ue.AmfUeNgapId = int64(ueCount)
+	ue.RanUeNgapId = int64(ueCount)
 	ue.AuthenticationSubs = GetAuthSubscription(TestGenAuthData.MilenageTestSet19.K,
 		TestGenAuthData.MilenageTestSet19.OPC,
 		TestGenAuthData.MilenageTestSet19.OP)
@@ -142,7 +116,7 @@ func RunRegTrans(imsiStr string, ranN2Ipv4Addr string, amfN2Ipv4Addr string, ran
 	ueSecurityCapability := ue.GetUESecurityCapability()
 	registrationRequest := nasTestpacket.GetRegistrationRequest(
 		nasMessage.RegistrationType5GSInitialRegistration, mobileIdentity5GS, nil, ueSecurityCapability, nil, nil, nil)
-	sendMsg, err = GetInitialUEMessage(ue.RanUeNgapId, registrationRequest, "")
+	sendMsg, err := GetInitialUEMessage(ue.RanUeNgapId, registrationRequest, "")
 	CheckErr(err, "GetInitialUEMessage")
 	_, err = conn.Write(sendMsg)
 	CheckErr(err, "conn.Write(sendMsg)")
@@ -150,7 +124,7 @@ func RunRegTrans(imsiStr string, ranN2Ipv4Addr string, amfN2Ipv4Addr string, ran
 	// receive NAS Authentication Request Msg
 	n, err = conn.Read(recvMsg)
 	CheckErr(err, "conn.Read(recvMsg)")
-	ngapPdu, err = ngap.Decoder(recvMsg[:n])
+	ngapPdu, err := ngap.Decoder(recvMsg[:n])
 	CheckErr(err, "ngap.Decoder(recvMsg[:n])")
 	if ngapPdu.Present != ngapType.NGAPPDUPresentInitiatingMessage {
 		log.Fatalf("No NGAP Initiating Message received.")
@@ -265,56 +239,9 @@ func RunRegTrans(imsiStr string, ranN2Ipv4Addr string, amfN2Ipv4Addr string, ran
 	// wait 1s
 	time.Sleep(1 * time.Second)
 
-	// Send the dummy packet
-	// ping IP(tunnel IP) from 60.60.0.2(127.0.0.1) to 60.60.0.20(127.0.0.8)
-	gtpHdr, err := hex.DecodeString("32ff00340000000100000000")
-	CheckErr(err, "hex.DecodeString - 1")
-	icmpData, err := hex.DecodeString("8c870d0000000000101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f3031323334353637")
-	CheckErr(err, "hex.DecodeString - 2")
-
-	ipv4hdr := ipv4.Header{
-		Version:  4,
-		Len:      20,
-		Protocol: 1,
-		Flags:    0,
-		TotalLen: 48,
-		TTL:      64,
-		Src:      net.ParseIP("60.60.0.1").To4(),
-		Dst:      net.ParseIP("60.60.0.101").To4(),
-		ID:       1,
-	}
-	checksum := CalculateIpv4HeaderChecksum(&ipv4hdr)
-	ipv4hdr.Checksum = int(checksum)
-
-	v4HdrBuf, err := ipv4hdr.Marshal()
-	CheckErr(err, "ipv4hdr.Marshal()")
-	tt := append(gtpHdr, v4HdrBuf...)
-
-	m := icmp.Message{
-		Type: ipv4.ICMPTypeEcho, Code: 0,
-		Body: &icmp.Echo{
-			ID: 12394, Seq: 1,
-			Data: icmpData,
-		},
-	}
-	b, err := m.Marshal(nil)
-	CheckErr(err, "m.Marshal(nil)")
-	b[2] = 0xaf
-	b[3] = 0x88
-	_, err = upfConn.Write(append(tt, b...))
-	CheckErr(err, "upfConn.Write")
-
-	time.Sleep(1 * time.Second)
-
 	// delete test data
 	DelAuthSubscriptionToMongoDB(ue.Supi)
 	DelAccessAndMobilitySubscriptionDataFromMongoDB(ue.Supi, servingPlmnId)
 	DelSmfSelectionSubscriptionDataFromMongoDB(ue.Supi, servingPlmnId)
 
-	// close Connection
-	conn.Close()
-	upfConn.Close()
-
-	// terminate all NF
-	//NfTerminate()
 }
