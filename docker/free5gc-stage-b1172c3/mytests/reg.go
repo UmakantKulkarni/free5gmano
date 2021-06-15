@@ -1,31 +1,32 @@
 package main
 
 import (
-        "test"
-        "github.com/free5gc/ngap"
-        "github.com/free5gc/ngap/ngapType"
-	"strconv"
-	"log"
 	"fmt"
+	"github.com/free5gc/ngap"
+	"github.com/free5gc/ngap/ngapType"
 	"io/ioutil"
+	"log"
+	"strconv"
+	"test"
 )
 
 const ranN2Ipv4Addr string = "10.244.1.3"
 const amfN2Ipv4Addr string = "10.244.1.2"
 const ranN3Ipv4Addr string = "10.244.1.3"
 const upfN3Ipv4Addr string = "10.244.1.8"
+
 var enableLogging = true
 
 func main() {
 	if !enableLogging {
-	        fmt.Printf("Logging is disabled")
-	        log.SetOutput(ioutil.Discard)
+		fmt.Printf("Logging is disabled")
+		log.SetOutput(ioutil.Discard)
 	}
 
 	var n int
 	var sendMsg []byte
 	var recvMsg = make([]byte, 2048)
-	
+
 	imsi := 2089300000000
 	// RAN connect to AMF
 	conn, err := test.ConnectToAmf(amfN2Ipv4Addr, ranN2Ipv4Addr, 38412, 9487)

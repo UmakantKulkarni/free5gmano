@@ -1,11 +1,11 @@
 package main
 
 import (
-  "test"
-	"strconv"
-	"log"
 	"fmt"
 	"io/ioutil"
+	"log"
+	"strconv"
+	"test"
 )
 
 var enableLogging = true
@@ -17,18 +17,18 @@ func main() {
 	}
 
 	imsi := 2089300000000
-  servingPlmnId := "20893"
+	servingPlmnId := "20893"
 	for i := 0; i < 10; i++ {
 		fmt.Printf("Loop %d", i)
 		fmt.Println("")
-    // delete test data
-    imsiStr := string("imsi-")+string(strconv.Itoa(imsi))
-  	test.DelAuthSubscriptionToMongoDB(imsiStr)
-  	test.DelAccessAndMobilitySubscriptionDataFromMongoDB(imsiStr, servingPlmnId)
-    test.DelSessionManagementSubscriptionDataFromMongoDB(imsiStr, servingPlmnId)
-  	test.DelSmfSelectionSubscriptionDataFromMongoDB(imsiStr, servingPlmnId)
-    test.DelAmPolicyDataFromMongoDB(imsiStr)
-    test.DelSmPolicyDataFromMongoDB(imsiStr)
+		// delete test data
+		imsiStr := string("imsi-") + string(strconv.Itoa(imsi))
+		test.DelAuthSubscriptionToMongoDB(imsiStr)
+		test.DelAccessAndMobilitySubscriptionDataFromMongoDB(imsiStr, servingPlmnId)
+		test.DelSessionManagementSubscriptionDataFromMongoDB(imsiStr, servingPlmnId)
+		test.DelSmfSelectionSubscriptionDataFromMongoDB(imsiStr, servingPlmnId)
+		test.DelAmPolicyDataFromMongoDB(imsiStr)
+		test.DelSmPolicyDataFromMongoDB(imsiStr)
 		imsi = imsi + 1
 	}
 

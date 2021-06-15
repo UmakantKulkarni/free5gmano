@@ -1,19 +1,19 @@
 package test
 
 import (
-        "time"
-				"strconv"
-        "github.com/free5gc/CommonConsumerTestData/UDM/TestGenAuthData"
-        "github.com/free5gc/nas"
-        "github.com/free5gc/nas/nasMessage"
-        "github.com/free5gc/nas/nasTestpacket"
-        "github.com/free5gc/nas/nasType"
-        "github.com/free5gc/nas/security"
-        "github.com/free5gc/ngap"
-        "github.com/free5gc/ngap/ngapType"
-        "github.com/free5gc/openapi/models"
-				"git.cs.nctu.edu.tw/calee/sctp"
-				"log"
+	"git.cs.nctu.edu.tw/calee/sctp"
+	"github.com/free5gc/CommonConsumerTestData/UDM/TestGenAuthData"
+	"github.com/free5gc/nas"
+	"github.com/free5gc/nas/nasMessage"
+	"github.com/free5gc/nas/nasTestpacket"
+	"github.com/free5gc/nas/nasType"
+	"github.com/free5gc/nas/security"
+	"github.com/free5gc/ngap"
+	"github.com/free5gc/ngap/ngapType"
+	"github.com/free5gc/openapi/models"
+	"log"
+	"strconv"
+	"time"
 )
 
 var n int
@@ -29,15 +29,15 @@ func CheckErr(err error, msg string) {
 
 // Get GetMobileIdentity5GS
 func GetMobileIdentity5GS(imsi string) (uint64, uint64, uint64, uint64) {
-  z := imsi[5:]
+	z := imsi[5:]
 	a1 := z[0:2]
 	b1 := z[2:4]
 	c1 := z[4:6]
 	d1 := z[6:8]
-	a2 := string(a1[1])+string(a1[0])
-	b2 := string(b1[1])+string(b1[0])
-	c2 := string(c1[1])+string(c1[0])
-	d2 := string(d1[1])+string(d1[0])
+	a2 := string(a1[1]) + string(a1[0])
+	b2 := string(b1[1]) + string(b1[0])
+	c2 := string(c1[1]) + string(c1[0])
+	d2 := string(d1[1]) + string(d1[0])
 	a3, _ := strconv.ParseUint(a2, 16, 8)
 	b3, _ := strconv.ParseUint(b2, 16, 8)
 	c3, _ := strconv.ParseUint(c2, 16, 8)
@@ -47,7 +47,7 @@ func GetMobileIdentity5GS(imsi string) (uint64, uint64, uint64, uint64) {
 }
 
 func RunRegTrans(conn *sctp.SCTPConn, imsiStr string, ranN3Ipv4Addr string, ueCount int) {
- 
+
 	// New UE
 	// ue := NewRanUeContext("imsi-2089300007487", 1, security.AlgCiphering128NEA2, security.AlgIntegrity128NIA2)
 	ue := NewRanUeContext(string("imsi-")+string(imsiStr), 1, security.AlgCiphering128NEA0, security.AlgIntegrity128NIA2)
@@ -106,12 +106,12 @@ func RunRegTrans(conn *sctp.SCTPConn, imsiStr string, ranN3Ipv4Addr string, ueCo
 		}
 	}
 
-  a3, b3, c3, d3 := GetMobileIdentity5GS(imsiStr)
+	a3, b3, c3, d3 := GetMobileIdentity5GS(imsiStr)
 	// send InitialUeMessage(Registration Request)(imsi-2089300007487)
 	mobileIdentity5GS := nasType.MobileIdentity5GS{
 		Len:    12, // suci
- 		Buffer: []uint8{0x01, 0x02, 0xf8, 0x39, 0xf0, 0xff, 0x00, 0x00, uint8(a3), uint8(b3), uint8(c3), uint8(d3)},
-	 }
+		Buffer: []uint8{0x01, 0x02, 0xf8, 0x39, 0xf0, 0xff, 0x00, 0x00, uint8(a3), uint8(b3), uint8(c3), uint8(d3)},
+	}
 
 	ueSecurityCapability := ue.GetUESecurityCapability()
 	registrationRequest := nasTestpacket.GetRegistrationRequest(
@@ -226,7 +226,7 @@ func RunRegTrans(conn *sctp.SCTPConn, imsiStr string, ranN3Ipv4Addr string, ueCo
 	ngapPdu, err = ngap.Decoder(recvMsg[:n])
 	CheckErr(err, "ngap.Decoder(recvMsg[:n])")
 
-  if ngapPdu.Present != ngapType.NGAPPDUPresentInitiatingMessage && ngapPdu.InitiatingMessage.ProcedureCode.Value != ngapType.ProcedureCodePDUSessionResourceSetup {
+	if ngapPdu.Present != ngapType.NGAPPDUPresentInitiatingMessage && ngapPdu.InitiatingMessage.ProcedureCode.Value != ngapType.ProcedureCodePDUSessionResourceSetup {
 		log.Fatalf("No PDUSessionResourceSetup received.")
 	}
 

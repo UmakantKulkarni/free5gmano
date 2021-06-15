@@ -1,30 +1,31 @@
 package main
 
 import (
-  "test"
-  "golang.org/x/net/http2"
 	"crypto/tls"
+	"fmt"
+	"git.cs.nctu.edu.tw/calee/sctp"
+	"github.com/free5gc/ngap"
+	"github.com/free5gc/ngap/ngapType"
+	"golang.org/x/net/http2"
+	"io/ioutil"
+	"log"
 	"net"
 	"net/http"
-  "github.com/free5gc/ngap"
-  "github.com/free5gc/ngap/ngapType"
 	"strconv"
-	"log"
-	"fmt"
-	"io/ioutil"
-	"git.cs.nctu.edu.tw/calee/sctp"
+	"test"
 )
 
 const ranN2Ipv4Addr string = "10.244.1.3"
 const amfN2Ipv4Addr string = "10.244.1.2"
 const ranN3Ipv4Addr string = "10.244.1.3"
 const upfN3Ipv4Addr string = "10.244.1.8"
+
 var enableLogging = true
 
 func main() {
 	if !enableLogging {
-	        fmt.Printf("Logging is disabled")
-	        log.SetOutput(ioutil.Discard)
+		fmt.Printf("Logging is disabled")
+		log.SetOutput(ioutil.Discard)
 	}
 
 	var n int
@@ -67,10 +68,10 @@ func H2CServerPrior(amfConn *sctp.SCTPConn, ranN3Ipv4Addr string) {
 			DialTLS: func(network, addr string, cfg *tls.Config) (net.Conn, error) {
 				return net.Dial(network, addr)
 			},
-	 	},
+		},
 	}
 	server := http2.Server{}
-	
+
 	l, err := net.Listen("tcp", "0.0.0.0:80")
 	test.CheckErr(err, "while listening")
 
@@ -86,8 +87,8 @@ func H2CServerPrior(amfConn *sctp.SCTPConn, ranN3Ipv4Addr string) {
 
 		server.ServeConn(conn, &http2.ServeConnOpts{
 			Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			log.Printf("New Connection: %+v\n", r)
-			test.RunRegTrans(amfConn, strconv.Itoa(imsi), ranN3Ipv4Addr, ueCount)
+				log.Printf("New Connection: %+v\n", r)
+				test.RunRegTrans(amfConn, strconv.Itoa(imsi), ranN3Ipv4Addr, ueCount)
 			}),
 		})
 	}
