@@ -8,11 +8,11 @@ data:
     configuration:
       amfName: AMF
       ngapIpList:
-        - free5gc-amf-svc
+        - MY_POD_IP
       sbi:
         scheme: http
         registerIPv4: free5gc-amf-svc # 10.96.100.2 # IP used to register to NRF
-        bindingIPv4: free5gc-amf-svc  # IP used to bind the service
+        bindingIPv4: 0.0.0.0  # IP used to bind the service
         port: 29518
       serviceNameList:
         - namf-comm
